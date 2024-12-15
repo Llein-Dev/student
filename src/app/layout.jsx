@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     (<html lang="vi">
       <body className={inter.className}>{children}</body>
-    </html>)
+    </html>)  
   );
 }
 
