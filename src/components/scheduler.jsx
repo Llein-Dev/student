@@ -25,6 +25,9 @@ export function Scheduler({ role, events, onSelectSlot }) {
   const [view, setView] = useState('month');
 
   const handleSelectSlot = (slotInfo) => {
+    console.log('Slot info:', slotInfo);
+    console.log('Existing events:', events);
+  
     const existingEvent = events.find(
       (event) =>
         moment(event.start).isSame(slotInfo.start, 'day') &&
@@ -33,24 +36,16 @@ export function Scheduler({ role, events, onSelectSlot }) {
             ? 'Giáo viên bận'
             : `${role === 'studentA' ? 'Môn Excel' : 'Nhập môn lập trình'} đã đặt lịch`)
     );
-
+  
     if (existingEvent) {
-      // Nếu sự kiện đã tồn tại, xóa nó
+      console.log('Event exists, deleting:', existingEvent);
       onSelectSlot({ ...slotInfo, action: 'delete', eventToDelete: existingEvent });
-    } else if (
-      role === 'teacher' ||
-      !events.some(
-        (event) =>
-          moment(event.start).isSame(slotInfo.start, 'day') &&
-          (event.title === 'Giáo viên bận' ||
-            event.title !== `${role === 'studentA' ? 'Môn Excel' : 'Nhập môn lập trình'} đã đặt lịch`)
-      )
-    ) {
-      // Nếu là giáo viên hoặc ngày chưa được đặt, thêm sự kiện mới
+    } else {
+      console.log('Adding new event');
       onSelectSlot({ ...slotInfo, action: 'add' });
     }
   };
-
+  
   const formattedEvents = events.map((event) => ({
     ...event,
     start: new Date(event.start),
